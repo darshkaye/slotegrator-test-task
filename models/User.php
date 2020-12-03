@@ -99,6 +99,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->auth_key;
     }
 
+    public function getPrizes()
+    {
+        return $this->hasMany(Prizes::className(), ['user_id' => 'id']);
+    }
+
     /**
      * @inheritdoc
      */
