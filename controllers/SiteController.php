@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\User;
+use app\services\PrizesTypes;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -135,7 +136,11 @@ class SiteController extends Controller
     }
 
     public function actionGetPrize() {
-        echo 123;
+        $prizesTypes = new PrizesTypes();
+        $prizeKind = $prizesTypes->randomizeKind();
+        $value = $prizeKind->randomizePrize();
+        $kind = $prizeKind->getPrizeKind();
+        echo $value, '  ', $kind;
     }
 
     public function actionMoneyToLoyalty() {

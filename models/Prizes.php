@@ -62,4 +62,10 @@ class Prizes extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function setStatus(string $status): bool
+    {
+        $this->status = $status;
+        return$this->save();
+    }
 }

@@ -41,4 +41,9 @@ class PrizeBoxes extends \yii\db\ActiveRecord
             'name' => 'Name',
         ];
     }
+
+    public static function getLength()
+    {
+        return count(self::find()->all());
+    }
 }
