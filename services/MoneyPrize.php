@@ -9,6 +9,7 @@ use app\models\Prize;
 use app\models\User;
 use Exception;
 use Yii;
+use yii\httpclient\Client;
 
 class MoneyPrize extends AbstractPrizeType
 {
@@ -59,6 +60,26 @@ class MoneyPrize extends AbstractPrizeType
         $user->loyalty += $prize->value;
         if ($user->save()) {
             return $prize->save();
+        }
+        return false;
+    }
+
+    public function sendPrize(Prize $prize): bool
+    {
+        //sent API-request to bank with money
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('POST')
+            ->setUrl('https://reqbin.com/echo/post/json')
+            ->setData([
+                "Id" => 78912,
+                "Customer" => "Jason Sweet",
+                "Quantity" => 1,
+                "Price" => 18
+            ])
+            ->send();
+        if ($response->isOk) {
+            return parent::sendPrize($prize);
         }
         return false;
     }

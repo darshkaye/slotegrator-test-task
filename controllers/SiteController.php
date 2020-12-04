@@ -175,4 +175,16 @@ class SiteController extends Controller
         }
         return 'fail';
     }
+
+    public function actionSendPrize($id)
+    {
+        $prize = Prize::findOne(['id' => $id, 'status' => Prize::STATUS_APPROVED]);
+        if ($prize) {
+            $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
+            if (!is_null($prizeType) && $prizeType->sendPrize($prize)) {
+                return 'success';
+            }
+        }
+        return 'fail';
+    }
 }

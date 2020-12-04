@@ -43,4 +43,13 @@ class LoyaltyPrize extends AbstractPrizeType
         }
         return false;
     }
+
+    /**
+     * @param Prize $prize
+     * @return bool
+     */
+    public function sendPrize(Prize $prize): bool
+    {
+        return false;
+    }
 }
