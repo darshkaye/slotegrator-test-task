@@ -4,6 +4,7 @@
 namespace app\services;
 
 use app\models\enums\PrizesKinds;
+use app\models\Prize;
 use Exception;
 
 class PrizesTypes
@@ -11,6 +12,11 @@ class PrizesTypes
     public const KIND_MONEY = 1;
     public const KIND_LOYALTY = 2;
     public const KIND_BOX = 3;
+    public const MAP = [
+        PrizesKinds::MONEY => self::KIND_MONEY,
+        PrizesKinds::LOYALTY => self::KIND_LOYALTY,
+        PrizesKinds::BOX => self::KIND_BOX,
+    ];
 
     /**
      * @return AbstractPrizeType|null
@@ -19,6 +25,28 @@ class PrizesTypes
     public function randomizeKind(): ?AbstractPrizeType
     {
         $kind = random_int(1, 3);
+        $kindClass = $this->getKind($kind);
+        $prizes = Prize::findAll([
+            'user_id' => Yii::$app->user->getId(),
+            'kind' => $kindClass->getPrizeKind(),
+        ]);
+        if ($kindClass::LIMIT <= count($prizes)) {
+            $kindClass = $this->randomizeKind();
+        }
+        return $kindClass;
+    }
+
+    /**
+     * @param string $kindName
+     * @return AbstractPrizeType|null
+     */
+    public function getKindByName(string $kindName): ?AbstractPrizeType
+    {
+        return $this->getKind(self::MAP[$kindName]);
+    }
+
+    public function getKind(int $kind): ?AbstractPrizeType
+    {
         $kindClass = null;
         switch ($kind) {
             case self::KIND_MONEY:

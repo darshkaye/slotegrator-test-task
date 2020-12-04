@@ -141,18 +141,39 @@ class SiteController extends Controller
         //echo"<pre>"; print_r($prize);echo"</pre>";
     }
 
-    public function actionMoneyToLoyalty()
+    public function actionMoneyToLoyalty($id)
     {
-
+        $prize = Prize::findOne(['id' => $id]);
+        if ($prize) {
+            $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
+            if ($prizeType /*&& $prizeType->($prize)*/) {
+                echo 'success';
+            }
+        }
+        echo 'fail';
     }
 
     public function actionRejectPrize($id)
     {
-        echo $id;
+        $prize = Prize::findOne(['id' => $id]);
+        if ($prize) {
+            $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
+            if ($prizeType && $prizeType->rejectPrize($prize)) {
+                echo 'successe';
+            }
+        }
+        echo 'fail';
     }
 
-    public function actionApprovePrize()
+    public function actionApprovePrize($id)
     {
-
+        $prize = Prize::findOne(['id' => $id]);
+        if ($prize) {
+            $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
+            if ($prizeType && $prizeType->approvePrize($prize)) {
+                echo 'success';
+            }
+        }
+        echo 'fail';
     }
 }
