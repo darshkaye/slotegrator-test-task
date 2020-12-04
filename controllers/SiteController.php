@@ -138,16 +138,19 @@ class SiteController extends Controller
                 ]
             );
         }
-        //echo"<pre>"; print_r($prize);echo"</pre>";
     }
 
     public function actionMoneyToLoyalty($id)
     {
-        $prize = Prize::findOne(['id' => $id]);
+        $prize = Prize::findOne(['id' => $id, 'status' => Prize::STATUS_GENERATED]);
         if ($prize) {
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
-            if ($prizeType /*&& $prizeType->($prize)*/) {
-                echo 'success';
+            try {
+                if ($prizeType && $prizeType->convertToMoney($prize)) {
+                    echo 'success';
+                }
+            } catch (\Exception $e) {
+                echo 'fail';
             }
         }
         echo 'fail';
@@ -155,11 +158,11 @@ class SiteController extends Controller
 
     public function actionRejectPrize($id)
     {
-        $prize = Prize::findOne(['id' => $id]);
+        $prize = Prize::findOne(['id' => $id, 'status' => Prize::STATUS_GENERATED]);
         if ($prize) {
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
             if ($prizeType && $prizeType->rejectPrize($prize)) {
-                echo 'successe';
+                echo 'success';
             }
         }
         echo 'fail';
@@ -167,7 +170,7 @@ class SiteController extends Controller
 
     public function actionApprovePrize($id)
     {
-        $prize = Prize::findOne(['id' => $id]);
+        $prize = Prize::findOne(['id' => $id, 'status' => Prize::STATUS_GENERATED]);
         if ($prize) {
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
             if ($prizeType && $prizeType->approvePrize($prize)) {

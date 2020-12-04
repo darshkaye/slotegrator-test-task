@@ -24,12 +24,6 @@ abstract class AbstractPrizeType
         return (string)$prize->value;
     }
 
-    public function connectToUser(Prize $prize, User $user): bool
-    {
-        $prize->user_id = $user->getId();
-        return $prize->save();
-    }
-
     public function getPrize(Prize $prize): bool
     {
         return $prize->setStatus(Prize::STATUS_APPROVED);
