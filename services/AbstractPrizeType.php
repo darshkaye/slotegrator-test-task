@@ -10,7 +10,7 @@ use app\models\User;
 
 abstract class AbstractPrizeType
 {
-    const LIMIT = -1; // limit of prizes count. -1 = unlimited
+    public const LIMIT = -1; // limit of prizes count. -1 = unlimited
 
     abstract public static function getPrizeKind(): string;
     abstract public function randomizePrize(): int;
@@ -42,5 +42,10 @@ abstract class AbstractPrizeType
     public function sendPrize(Prize $prize): bool
     {
         return $prize->setStatus(Prize::STATUS_SENT);
+    }
+
+    public function isOverLimit():bool
+    {
+        return false;
     }
 }

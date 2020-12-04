@@ -6,6 +6,7 @@ namespace app\services;
 use app\models\enums\PrizesKinds;
 use app\models\Prize;
 use Exception;
+use Yii;
 
 class PrizesTypes
 {
@@ -26,11 +27,7 @@ class PrizesTypes
     {
         $kind = random_int(1, 3);
         $kindClass = $this->getKind($kind);
-        $prizes = Prize::findAll([
-            'user_id' => Yii::$app->user->getId(),
-            'kind' => $kindClass->getPrizeKind(),
-        ]);
-        if ($kindClass::LIMIT <= count($prizes)) {
+        if ($kindClass->isOverLimit()) {
             $kindClass = $this->randomizeKind();
         }
         return $kindClass;

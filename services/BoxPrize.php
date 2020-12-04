@@ -9,9 +9,11 @@ use app\models\Prize;
 use app\models\PrizeBoxes;
 use yii\base\ErrorException;
 use Exception;
+use Yii;
 
 class BoxPrize extends AbstractPrizeType
 {
+    public const LIMIT = 20;
     /**
      * @return string
      */
@@ -39,5 +41,17 @@ class BoxPrize extends AbstractPrizeType
     public function getValue(Prize $prize): string
     {
         return PrizeBoxes::findOne(['id' => $prize->value])->name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOverLimit():bool
+    {
+        $prizes = Prize::findAll([
+            'user_id' => Yii::$app->user->getId(),
+            'kind' => self::getPrizeKind(),
+        ]);
+        return self::LIMIT <= count($prizes);
     }
 }

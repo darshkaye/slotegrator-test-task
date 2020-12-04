@@ -83,4 +83,17 @@ class MoneyPrize extends AbstractPrizeType
         }
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    public function isOverLimit():bool
+    {
+        $prizes = Prize::findAll([
+            'user_id' => Yii::$app->user->getId(),
+            'kind' => self::getPrizeKind(),
+        ]);
+        $count = array_sum(array_map(fn(Prize $prize) => $prize->value, $prizes));
+        return self::LIMIT <= $count;
+    }
 }
