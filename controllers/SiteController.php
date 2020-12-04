@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Prize;
 use app\models\User;
 use app\services\PrizesTypes;
 use Yii;
@@ -101,24 +102,6 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Add admin user
      */
     public function actionAddAdmin() {
@@ -135,23 +118,41 @@ class SiteController extends Controller
         }
     }
 
-    public function actionGetPrize() {
+    public function actionGetPrize()
+    {
         $prizesTypes = new PrizesTypes();
         $prizeKind = $prizesTypes->randomizeKind();
-        $value = $prizeKind->randomizePrize();
-        $kind = $prizeKind->getPrizeKind();
-        echo $value, '  ', $kind;
+        $prize = new Prize();
+        $params = [
+            'user_id' => Yii::$app->user->getId(),
+            'kind' => $prizeKind->getPrizeKind(),
+            'value' => $prizeKind->randomizePrize(),
+            'status' => Prize::STATUS_GENERATED,
+        ];
+        if ($prize->load($params, '') && $prize->save()) {
+            return $this->render(
+                'prize_view',
+                [
+                    'prize' => $prize,
+                    'prizeKind' => $prizeKind,
+                ]
+            );
+        }
+        //echo"<pre>"; print_r($prize);echo"</pre>";
     }
 
-    public function actionMoneyToLoyalty() {
+    public function actionMoneyToLoyalty()
+    {
 
     }
 
-    public function actionRejectPrize() {
-
+    public function actionRejectPrize($id)
+    {
+        echo $id;
     }
 
-    public function actionApprovePrize() {
+    public function actionApprovePrize()
+    {
 
     }
 }

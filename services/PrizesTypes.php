@@ -8,9 +8,9 @@ use Exception;
 
 class PrizesTypes
 {
-    const KIND_MONEY = 1;
-    const KIND_LOYALTY = 2;
-    const KIND_BOX = 3;
+    public const KIND_MONEY = 1;
+    public const KIND_LOYALTY = 2;
+    public const KIND_BOX = 3;
 
     /**
      * @return AbstractPrizeType|null

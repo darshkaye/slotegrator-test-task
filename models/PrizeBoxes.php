@@ -15,7 +15,7 @@ class PrizeBoxes extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'prize_boxes';
     }
@@ -23,7 +23,7 @@ class PrizeBoxes extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name'], 'required'],
@@ -34,7 +34,7 @@ class PrizeBoxes extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -42,7 +42,10 @@ class PrizeBoxes extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getLength()
+    /**
+     * @return int
+     */
+    public static function getLength(): int
     {
         return count(self::find()->all());
     }

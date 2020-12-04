@@ -4,7 +4,8 @@
 namespace app\services;
 
 
-use app\models\Prizes;
+use app\models\Prize;
+use app\models\PrizeBoxes;
 use app\models\User;
 
 abstract class AbstractPrizeType
@@ -14,24 +15,33 @@ abstract class AbstractPrizeType
     abstract public function getPrizeKind(): string;
     abstract public function randomizePrize(): int;
 
-    public function connectToUser(Prizes $prize, User $user): bool
+    /**
+     * @param Prize $prize
+     * @return string
+     */
+    public function getValue(Prize $prize): string
+    {
+        return (string)$prize->value;
+    }
+
+    public function connectToUser(Prize $prize, User $user): bool
     {
         $prize->user_id = $user->getId();
         return $prize->save();
     }
 
-    public function getPrize(Prizes $prize): bool
+    public function getPrize(Prize $prize): bool
     {
-        return $prize->setStatus(Prizes::STATUS_APPROVED);
+        return $prize->setStatus(Prize::STATUS_APPROVED);
     }
 
-    public function rejectPrize(Prizes $prize): bool
+    public function rejectPrize(Prize $prize): bool
     {
-        return $prize->setStatus(Prizes::STATUS_REJECTED);
+        return $prize->setStatus(Prize::STATUS_REJECTED);
     }
 
-    public function sendPrize(Prizes $prize): bool
+    public function sendPrize(Prize $prize): bool
     {
-        return $prize->setStatus(Prizes::STATUS_SENT);
+        return $prize->setStatus(Prize::STATUS_SENT);
     }
 }

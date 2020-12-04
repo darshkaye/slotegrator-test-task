@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "prizes".
@@ -15,28 +17,39 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class Prizes extends \yii\db\ActiveRecord
+class Prize extends \yii\db\ActiveRecord
 {
-    const STATUS_GENERATED = 'generated';
-    const STATUS_APPROVED = 'approved';
-    const STATUS_REJECTED = 'rejected';
-    const STATUS_SENT = 'sent';
-    const STATUS_CONVERTED = 'converted';
+    public const STATUS_GENERATED = 'generated';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
+    public const STATUS_SENT = 'sent';
+    public const STATUS_CONVERTED = 'converted';
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'prizes';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function rules()
+    public function behaviors()
     {
         return [
-            [['user_id', 'kind', 'value', 'created_at', 'updated_at'], 'required'],
+            TimestampBehavior::className(),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules(): array
+    {
+        return [
+            [['user_id', 'kind', 'value'], 'required'],
             [['user_id', 'value', 'created_at', 'updated_at'], 'integer'],
             [['kind', 'status'], 'string', 'max' => 255],
         ];
@@ -45,7 +58,7 @@ class Prizes extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -58,11 +71,30 @@ class Prizes extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getUser()
+    public function setData(array $values): bool
+    {
+        try {
+            foreach ($values as $key => $value) {
+                $this->{$key} = $value;
+            }
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getUser(): ActiveQuery
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    /**
+     * @param string $status
+     * @return bool
+     */
     public function setStatus(string $status): bool
     {
         $this->status = $status;

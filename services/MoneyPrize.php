@@ -5,7 +5,7 @@ namespace app\services;
 
 
 use app\models\enums\PrizesKinds;
-use app\models\Prizes;
+use app\models\Prize;
 use Exception;
 
 class MoneyPrize extends AbstractPrizeType
@@ -27,7 +27,7 @@ class MoneyPrize extends AbstractPrizeType
         return random_int(1, self::LIMIT);
     }
 
-    public function convertToMoney(Prizes $prize)
+    public function convertToMoney(Prize $prize)
     {
         $prize->kind = PrizesKinds::LOYALTY;
         $prize->value *= self::LOYALTY_K;
