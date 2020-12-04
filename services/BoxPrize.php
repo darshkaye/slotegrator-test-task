@@ -3,7 +3,6 @@
 
 namespace app\services;
 
-
 use app\models\enums\PrizesKinds;
 use app\models\Prize;
 use app\models\PrizeBoxes;

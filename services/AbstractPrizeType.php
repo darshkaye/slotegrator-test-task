@@ -5,8 +5,6 @@ namespace app\services;
 
 
 use app\models\Prize;
-use app\models\PrizeBoxes;
-use app\models\User;
 
 abstract class AbstractPrizeType
 {
