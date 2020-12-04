@@ -145,12 +145,8 @@ class SiteController extends Controller
         $prize = Prize::findOne(['id' => $id, 'status' => Prize::STATUS_GENERATED]);
         if ($prize) {
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
-            try {
-                if ($prizeType && $prizeType->convertToMoney($prize)) {
-                    return 'success';
-                }
-            } catch (\Exception $e) {
-                return 'fail';
+            if (!is_null($prizeType) && $prizeType->convertToMoney($prize)) {
+                return 'success';
             }
         }
         return 'fail';
@@ -161,7 +157,7 @@ class SiteController extends Controller
         $prize = Prize::findOne(['id' => $id, 'status' => Prize::STATUS_GENERATED]);
         if ($prize) {
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
-            if ($prizeType && $prizeType->rejectPrize($prize)) {
+            if (!is_null($prizeType) && $prizeType->rejectPrize($prize)) {
                 return 'success';
             }
         }
@@ -173,7 +169,7 @@ class SiteController extends Controller
         $prize = Prize::findOne(['id' => $id, 'status' => Prize::STATUS_GENERATED]);
         if ($prize) {
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
-            if ($prizeType && $prizeType->approvePrize($prize)) {
+            if (!is_null($prizeType) && $prizeType->approvePrize($prize)) {
                 return 'success';
             }
         }

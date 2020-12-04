@@ -15,7 +15,7 @@ class BoxPrize extends AbstractPrizeType
     /**
      * @return string
      */
-    public function getPrizeKind(): string
+    public static function getPrizeKind(): string
     {
         return PrizesKinds::BOX;
     }

@@ -18,7 +18,7 @@ class MoneyPrize extends AbstractPrizeType
     /**
      * @return string
      */
-    public function getPrizeKind(): string
+    public static function getPrizeKind(): string
     {
         return PrizesKinds::MONEY;
     }
@@ -52,9 +52,14 @@ class MoneyPrize extends AbstractPrizeType
      */
     public function convertToMoney(Prize $prize): bool
     {
-        $prize->kind = PrizesKinds::LOYALTY;
-        $prize->value *= self::LOYALTY_K;
+        $prize->kind = LoyaltyPrize::getPrizeKind();
+        $prize->value = floor($prize->value * self::LOYALTY_K);
         $prize->status = Prize::STATUS_CONVERTED;
-        return $prize->save();
+        $user = User::findOne(['id' => Yii::$app->user->getId()]);
+        $user->loyalty += $prize->value;
+        if ($user->save()) {
+            return $prize->save();
+        }
+        return false;
     }
 }
