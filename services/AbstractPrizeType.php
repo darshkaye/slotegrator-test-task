@@ -24,7 +24,7 @@ abstract class AbstractPrizeType
         return (string)$prize->value;
     }
 
-    public function getPrize(Prize $prize): bool
+    public function approvePrize(Prize $prize): bool
     {
         return $prize->setStatus(Prize::STATUS_APPROVED);
     }

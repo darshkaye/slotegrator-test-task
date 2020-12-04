@@ -12,8 +12,9 @@ use Exception;
 
 class BoxPrize extends AbstractPrizeType
 {
-    const MAX_VALUE = 1000;
-
+    /**
+     * @return string
+     */
     public function getPrizeKind(): string
     {
         return PrizesKinds::BOX;

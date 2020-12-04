@@ -147,13 +147,13 @@ class SiteController extends Controller
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
             try {
                 if ($prizeType && $prizeType->convertToMoney($prize)) {
-                    echo 'success';
+                    return 'success';
                 }
             } catch (\Exception $e) {
-                echo 'fail';
+                return 'fail';
             }
         }
-        echo 'fail';
+        return 'fail';
     }
 
     public function actionRejectPrize($id)
@@ -162,10 +162,10 @@ class SiteController extends Controller
         if ($prize) {
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
             if ($prizeType && $prizeType->rejectPrize($prize)) {
-                echo 'success';
+                return 'success';
             }
         }
-        echo 'fail';
+        return 'fail';
     }
 
     public function actionApprovePrize($id)
@@ -174,9 +174,9 @@ class SiteController extends Controller
         if ($prize) {
             $prizeType = (new PrizesTypes())->getKindByName($prize->kind);
             if ($prizeType && $prizeType->approvePrize($prize)) {
-                echo 'success';
+                return 'success';
             }
         }
-        echo 'fail';
+        return 'fail';
     }
 }
