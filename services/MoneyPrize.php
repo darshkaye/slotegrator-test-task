@@ -24,7 +24,7 @@ class MoneyPrize extends AbstractPrizeType
      */
     public function randomizePrize(): int
     {
-        return random_int(0, self::LIMIT);
+        return random_int(1, self::LIMIT);
     }
 
     public function convertToMoney(Prizes $prize)

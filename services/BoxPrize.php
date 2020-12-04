@@ -27,6 +27,6 @@ class BoxPrize extends AbstractPrizeType
         if ($boxesCount === 0) {
             throwException(new ErrorException('Boxes are absent'));
         }
-        return random_int(0, $boxesCount);
+        return random_int(1, $boxesCount);
     }
 }

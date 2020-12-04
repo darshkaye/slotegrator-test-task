@@ -21,6 +21,6 @@ class LoyaltyPrize extends AbstractPrizeType
      */
     public function randomizePrize(): int
     {
-        return random_int(0, self::MAX_VALUE);
+        return random_int(1, self::MAX_VALUE);
     }
 }
